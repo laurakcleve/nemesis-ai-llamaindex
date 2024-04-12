@@ -1,3 +1,4 @@
+import os
 from flask import ( Flask, request, jsonify )
 from llama_index.core import (
     StorageContext,
@@ -5,7 +6,14 @@ from llama_index.core import (
 )
 from flask import Flask
 from flask_cors import CORS, cross_origin
+from traceloop.sdk import Traceloop
+from dotenv import load_dotenv
 
+load_dotenv()
+
+TRACELOOP_API_KEY = os.environ['TRACELOOP_API_KEY']
+
+Traceloop.init(disable_batch=True)
 
 app = Flask(__name__)
 
