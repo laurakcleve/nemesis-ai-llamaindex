@@ -10,26 +10,19 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 
 @app.route("/")
-
-@app.route("/query", methods=["GET"])
-@cross_origin(origin='http://localhost:5173', methods=["GET"], headers=['Content-Type'])
-
-
-def query_index():
-    global index
-    query_text = request.args.get("text", None)
-    if query_text is None:
-        return jsonify(
-            "No text found, please include a ?text=blah parameter in the URL",
-            400,
-        )
-    query_engine = index.as_query_engine()
-    response = query_engine.query(query_text)
-    return jsonify(str(response)), 200
-
-
 def home():
     return "Hello World!"
+
+
+@app.route("/query", methods=["POST"])
+@cross_origin(origin='http://localhost:5173', methods=["POST"], headers=['Content-Type'])
+def query_index():
+    global index
+    query_text = request.json
+    query_engine = index.as_query_engine()
+    response = query_engine.query(query_text)
+    return jsonify(response.response), 200
+
 
 def load_index():
     global index
