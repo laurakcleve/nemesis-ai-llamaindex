@@ -2,7 +2,8 @@ import os
 from flask import ( Flask, request, jsonify )
 from llama_index.core import (
     StorageContext,
-    load_index_from_storage
+    load_index_from_storage,
+    ChatPromptTemplate
 )
 from flask import Flask
 from flask_cors import CORS, cross_origin
@@ -27,7 +28,13 @@ def home():
 def query_index():
     global index
     query_text = request.json
-    query_engine = index.as_query_engine()
+
+    messages = [
+        ( 'system', 'Answer the user\'s question given the provided context. First look at the heading of the relevant section from the context and assess whether it applies to the situation of the question, then reason through the logic of the rules before giving an answer. Your answer should be as accurate as possible, and should not include the details of the headings and sections, nor your steps of reasoning. If the answer cannot be found in the context, respond that you could not find the answer, without mentioning the context.' ),
+        ( 'user', 'Context information is below.\n---------------------\n{context_str}\n---------------------\nGiven the context information, answer the question: {query_str}\n' )
+    ]
+    qa_template = ChatPromptTemplate.from_messages(messages)
+    query_engine = index.as_query_engine(text_qa_template=qa_template)
     response = query_engine.query(query_text)
     return jsonify(response.response), 200
 
