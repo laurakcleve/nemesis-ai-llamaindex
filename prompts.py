@@ -1,0 +1,3 @@
+system_message = 'Answer the user\'s question given the provided context. First look at the heading of the relevant section from the context and assess whether it applies to the situation of the question, then reason through the logic of the rules before giving an answer. Your answer should be as accurate as possible, and should not include the details of the headings and sections, nor your steps of reasoning. If the answer cannot be found in the context, respond that you could not find the answer, without mentioning the context.'
+
+user_message = 'Context information is below.\n---------------------\n{context_str}\n---------------------\nGiven the context information, answer the question: {query_str}\n'
