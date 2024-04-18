@@ -28,7 +28,7 @@ app = Flask(__name__)
 
 
 @app.route("/query", methods=["POST"])
-@cross_origin(origin='http://localhost:5173', methods=["POST"], headers=['Content-Type'])
+@cross_origin(origin=os.environ['CORS_ORIGIN'], methods=["POST"], headers=['Content-Type'])
 def query_index():
     Settings.llm = OpenAI(model="gpt-4")
 
